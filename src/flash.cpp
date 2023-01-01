@@ -3,6 +3,10 @@
 #include <EEPROM.h>
 #include <Arduino.h>
 
+void Flash::begin() {
+	EEPROM.begin(70);
+}
+
 String Flash::readString(int start, int end) {
 	String result;
 	for (int i = start; i < end; i++) {

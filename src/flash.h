@@ -18,6 +18,7 @@ class Flash {
 		static String readString(int start, int end);
 		static void writeString(String val, int start, int end);
 	public:
+		static void begin();
 		static String getSSID();
 		static void setSSID(String newSSID);
 		static String getPassword();
