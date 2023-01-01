@@ -7,6 +7,8 @@
 #include <SPI.h>
 #include "main.h"
 #include "html.h"
+#include "flash.h"
+#include "utils.h"
 
 ESP8266WebServer server(80);
 Adafruit_SSD1306 display(DISPL_WIDTH, DISPL_HEIGHT, DISPL_MOSI, DISPL_CLK,
@@ -23,7 +25,6 @@ bool hasError;
 
 void setup() {
 	Serial.begin(9600);
-	EEPROM.begin(70);
 
 	if (!display.begin()) {
 		Serial.println(F("Failed to connect to display!"));
@@ -38,9 +39,11 @@ void setup() {
 	display.setTextColor(WHITE);
 	display.display();
 
-	String ssid = getSSID();
-	String pass = getPass();
-	stationID = getStationID();
+
+	
+	String ssid = Flash::getSSID();
+	String pass = Flash::getPassword();
+	stationID = Flash::getStationID();
 
 	WiFi.begin(ssid, pass);
 
@@ -85,79 +88,6 @@ bool testWifi(String ssid) {
 	Serial.println();
 	Serial.println(F("Failed to connect!"));
 	return false;
-}
-
-String getSSID() {
-	String ssid = readString(MEM_SSID_START, MEM_SSID_END);
-	return ssid;
-}
-
-String getPass() {
-	String pass = readString(MEM_PASS_START, MEM_PASS_END);
-	return pass;
-}
-
-String getStationID() {
-	String id = readString(MEM_STATION_ID_START, MEM_STATION_ID_END);
-	if (id == "") {
-		char buffer[7];
-		getRandomString(buffer, 7);
-
-		id = String(buffer);
-		setStationID(id);
-	}
-
-	return id;
-}
-
-String readString(int start, int end) {
-	String result;
-
-	for (int i = start; i < end; i++) {
-		int val = EEPROM.read(i);
-		if (val == 0 || val == 255)
-			break;
-		result += char(val);
-	}
-
-	return result;
-}
-
-void writeString(String val, int start, int end) {
-	uint8_t size = val.length();
-
-	for (int i = start; i < end; i++) {
-		if (i - start < size) {
-			EEPROM.write(i, val[i - start]);
-		} else {
-			EEPROM.write(i, 0);
-		}
-	}
-	EEPROM.commit();
-}
-
-void setSSID(String newSSID) {
-	if (newSSID.length() > 32) {
-		Serial.println(F("SSID is too long to store!"));
-		return;
-	}
-	writeString(newSSID, MEM_SSID_START, MEM_SSID_END);
-}
-
-void setPass(String newPass) {
-	if (newPass.length() > 32) {
-		Serial.println(F("Password is too long to store!"));
-		return;
-	}
-	writeString(newPass, MEM_PASS_START, MEM_PASS_END);
-}
-
-void setStationID(String newStationID) {
-	if (newStationID.length() > 6) {
-		Serial.println(F("StationID is too long to store!"));
-		return;
-	}
-	writeString(newStationID, MEM_STATION_ID_START, MEM_STATION_ID_END);
 }
 
 void setupAP() {
@@ -271,8 +201,8 @@ void handleConnect() {
 	newSSID.trim();
 	newPass.trim();
 
-	setSSID(newSSID);
-	setPass(newPass);
+	Flash::setSSID(newSSID);
+	Flash::setPassword(newPass);
 
 	String msg = F("<p>ssid: ");
 	msg += newSSID;
@@ -299,8 +229,8 @@ void handleDisconnect() {
 	server.send(200, "text/html", msg);
 
 	delay(200);
-	setSSID("");
-	setPass("");
+	Flash::setSSID("");
+	Flash::setPassword("");
 	WiFi.disconnect();
 	ESP.reset();
 }
@@ -393,37 +323,3 @@ void setBody() {
 	display.println(bodyText);
 }
 
-static const char CHARS[] =
-	"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
-void getRandomString(char value[], int length) {
-	randomSeed(getRandomSeed());
-
-	for (int i = 0; i < length - 1; i++) {
-		size_t index = random(0, 62);
-		value[i] = CHARS[index];
-	}
-
-	value[length - 1] = '\0';
-}
-
-unsigned long getRandomSeed() {
-	unsigned long seed = 0UL;
-	unsigned long reading = 0UL;
-	int interval = 5;
-	int bit = 0;
-
-	for (int i = 0; i < 31; i++) {
-		for (int j = 0; j < 3; j++) {
-			delay(2 + interval);
-
-			reading = analogRead(A0);
-			bit ^= reading & 1;
-			// randomly chosen numbers, no concrete meaning
-			interval = (reading % 6) * 10;
-		}
-		seed |= (long)bit << i;
-	}
-
-	return seed;
-}
