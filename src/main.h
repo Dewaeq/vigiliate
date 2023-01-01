@@ -28,12 +28,6 @@ void handleReadings();
 void handleStatus();
 void handleNotFound();
 
-// HTML/JSON parsing
-void addLineBreak(String &content);
-void addInput(String &content, String label, String name);
-template <typename T>
-void addJSONValue(String &json, String key, T value, bool comma = true);
-
 // UI methods
 void setUi();
 void setStatus();

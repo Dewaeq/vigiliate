@@ -9,6 +9,7 @@
 #include "html.h"
 #include "flash.h"
 #include "utils.h"
+#include "json.h"
 
 ESP8266WebServer server(80);
 Adafruit_SSD1306 display(DISPL_WIDTH, DISPL_HEIGHT, DISPL_MOSI, DISPL_CLK,
@@ -25,6 +26,7 @@ bool hasError;
 
 void setup() {
 	Serial.begin(9600);
+	Flash::begin();
 
 	if (!display.begin()) {
 		Serial.println(F("Failed to connect to display!"));
@@ -39,8 +41,6 @@ void setup() {
 	display.setTextColor(WHITE);
 	display.display();
 
-
-	
 	String ssid = Flash::getSSID();
 	String pass = Flash::getPassword();
 	stationID = Flash::getStationID();
@@ -158,33 +158,6 @@ void handleRoot() {
 
 	server.sendHeader("Content-Encoding", "gzip");
 	server.send(200, "text/html", index_html, html_size);
-	return;
-
-	String msg = F("<!DOCTYPE html><html><body>");
-	msg += "<h1>Local config</h1>";
-
-	if (!WiFi.isConnected()) {
-		msg += F("<form action='/connect' method='GET'>");
-
-		addInput(msg, "SSID: ", "ssid");
-		addLineBreak(msg);
-		addInput(msg, "PASS: ", "pass");
-		addLineBreak(msg);
-
-		msg += F("<input type='submit'>");
-		msg += F("</form>");
-	} else {
-		msg += F("<p>Station is online</p>");
-		msg += F("<p>Temperature: 15C</p>");
-		msg += F("<p>Humidity: 75%</p>");
-
-		msg += F("<form action='/disconnect' method='GET'>");
-		msg += F("<button type='submit'>Disconnect WiFi</button>");
-		msg += F("</form>");
-	}
-
-	msg += F("</body></html>");
-	server.send(200, "text/html", msg);
 }
 
 void handleConnect() {
@@ -204,17 +177,7 @@ void handleConnect() {
 	Flash::setSSID(newSSID);
 	Flash::setPassword(newPass);
 
-	String msg = F("<p>ssid: ");
-	msg += newSSID;
-	addLineBreak(msg);
-	msg += "pass: ";
-	msg += newPass;
-	msg += "</p>";
-
-	msg += F("<p>Station will now restart and try to establish a connection. "
-			 "See the display for the result</p>");
-
-	server.send(200, "text/html", msg);
+	server.send(200, "text/plain", "succes");
 
 	delay(200);
 	ESP.reset();
@@ -236,27 +199,29 @@ void handleDisconnect() {
 }
 
 void handleReadings() {
-	String response = "{";
+	Json json;
+	json.open();
+	json.addKeyValue("temp", temp);
+	json.addKeyValue("hum", hum);
+	json.addKeyValue("pm25", pm25);
+	json.addKeyValue("pm10", pm10);
+	json.close();
 
-	addJSONValue(response, "temp", temp);
-	addJSONValue(response, "hum", hum);
-	addJSONValue(response, "pm25", pm25);
-	addJSONValue(response, "pm10", pm10, false);
-
-	response += "}";
+	String response = json.build();
 
 	server.send(200, "application/json", response);
 }
 
 void handleStatus() {
-	String response = "{";
+	Json json;
+	json.open();
+	json.addKeyValue("connected", WiFi.isConnected());
+	json.addKeyValue("id", stationID);
+	json.addKeyValue("ip", getWifiIP().toString());
+	json.addKeyValue("ssid", getWifiSSID());
+	json.close();
 
-	addJSONValue(response, "connected", WiFi.isConnected());
-	addJSONValue(response, "id", stationID); 
-	addJSONValue(response, "ip", getWifiIP().toString());
-	addJSONValue(response, "ssid", getWifiSSID(), false);
-
-	response += "}";
+	String response = json.build();
 
 	server.send(200, "application/json", response);
 }
@@ -264,33 +229,6 @@ void handleStatus() {
 void handleNotFound() {
 	server.send(404, "text/html", "<h1>ERROR: 404</h1>");
 }
-
-void addLineBreak(String &content) {
-	content += "<br>";
-}
-
-void addInput(String &content, String label, String name) {
-	content += "<label for='";
-	content += name;
-	content += "'>";
-	content += label;
-	content += "</label>";
-
-	content += "<input name='";
-	content += name;
-	content += "'>";
-}
-
-// adds a comma to the end of the added line if [comma] is true
-template <typename T>
-void addJSONValue(String &json, String key, T value, bool comma) {
-	json += "\"" + key + "\": \"" + value + "\"";
-
-	if (comma) {
-		json += ",";
-	}
-}
-
 void setUi() {
 	display.clearDisplay();
 
@@ -322,4 +260,3 @@ void setBody() {
 	display.setCursor(0, STATUS_HEIGHT + 5);
 	display.println(bodyText);
 }
-
