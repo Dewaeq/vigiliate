@@ -22,8 +22,6 @@ void handleReadings();
 void handleStatus();
 
 // UI methods
-void setUi();
 void setStatus();
-void setBody();
 
 #endif

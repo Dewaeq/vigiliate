@@ -12,6 +12,7 @@
 #include "json.h"
 #include "wifi.h"
 #include "webserver.h"
+#include "gui.h"
 
 Adafruit_SSD1306 display(DISPL_WIDTH, DISPL_HEIGHT, DISPL_MOSI, DISPL_CLK,
 						 DISPL_DC, DISPL_RES, DISPL_CS);
@@ -21,13 +22,10 @@ float hum;
 float pm25;
 float pm10;
 
-String bodyText;
-String statusText;
-bool hasError;
-
 void setup() {
 	Serial.begin(9600);
 	Flash.begin();
+	Gui.begin();
 
 	if (!display.begin()) {
 		Serial.println(F("Failed to connect to display!"));
@@ -38,11 +36,9 @@ void setup() {
 	delay(500);
 
 	Serial.println();
-	display.clearDisplay();
-	display.setTextColor(WHITE);
-	display.display();
 
-	Connection con = Wifi.autoConfig();
+	Wifi.autoConfig();
+	setStatus();
 
 	Serial.println(F("Setting server"));
 	setupWebServer();
@@ -51,7 +47,6 @@ void setup() {
 
 void loop() {
 	WebServer.handle();
-	setUi();
 }
 
 void setupWebServer() {
@@ -84,11 +79,12 @@ void handleRoot() {
 
 void handleDisconnect() {
 	Serial.println("____disconnect____");
-	bodyText = F("Disconnecting WiFi...");
+	Gui.setBody("Disconnecting WiFi...");
 
 	WebServer.send(200, "text/plain", "succes");
 
 	delay(200);
+
 	Flash.setSSID("");
 	Flash.setPassword("");
 	WiFi.disconnect();
@@ -123,34 +119,15 @@ void handleStatus() {
 	WebServer.send(200, "application/json", response);
 }
 
-void setUi() {
-	display.clearDisplay();
-
-	setStatus();
-	setBody();
-	display.drawLine(0, STATUS_HEIGHT, DISPL_WIDTH, STATUS_HEIGHT, WHITE);
-
-	display.display();
-	delay(200);
-}
-
 void setStatus() {
-	display.setTextSize(1);
-	display.setCursor(0, 0);
+	String ip = Wifi.getIP().toString();
+	String ssid = Wifi.getSSID();
 
-	if (!hasError) {
-		IPAddress ip = Wifi.getIP();
-		String ssid = Wifi.getSSID();
+	Gui.setStatus("");
+	Gui.appendStatus(ip);
+	Gui.appendStatus(ssid, true);
 
-		display.println(ip.toString());
-		display.println(ssid);
-	} else {
-		display.println("ERROR");
-	}
-}
+	Serial.printf("Gui status: %s", Gui.status);
 
-void setBody() {
-	display.setTextSize(hasError ? 2 : 1);
-	display.setCursor(0, STATUS_HEIGHT + 5);
-	display.println(bodyText);
+	Gui.show();
 }
