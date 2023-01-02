@@ -13,20 +13,13 @@
 #define DISPL_DC 0	  // D3
 #define DISPL_CS 15	  // D8
 
-// WiFi connection
-bool testWifi(String ssid);
-void setupAP();
 void setupWebServer();
-IPAddress getWifiIP();
-String getWifiSSID();
 
 // routes
 void handleRoot();
-void handleConnect();
 void handleDisconnect();
 void handleReadings();
 void handleStatus();
-void handleNotFound();
 
 // UI methods
 void setUi();
