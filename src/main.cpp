@@ -10,6 +10,7 @@
 #include "flash.h"
 #include "utils.h"
 #include "json.h"
+#include "wifi.h"
 
 ESP8266WebServer server(80);
 Adafruit_SSD1306 display(DISPL_WIDTH, DISPL_HEIGHT, DISPL_MOSI, DISPL_CLK,
@@ -26,7 +27,7 @@ bool hasError;
 
 void setup() {
 	Serial.begin(9600);
-	Flash::begin();
+	Flash.begin();
 
 	if (!display.begin()) {
 		Serial.println(F("Failed to connect to display!"));
@@ -41,9 +42,9 @@ void setup() {
 	display.setTextColor(WHITE);
 	display.display();
 
-	String ssid = Flash::getSSID();
-	String pass = Flash::getPassword();
-	stationID = Flash::getStationID();
+	String ssid = Flash.getSSID();
+	String pass = Flash.getPassword();
+	stationID = Flash.getStationID();
 
 	WiFi.begin(ssid, pass);
 
@@ -174,8 +175,8 @@ void handleConnect() {
 	newSSID.trim();
 	newPass.trim();
 
-	Flash::setSSID(newSSID);
-	Flash::setPassword(newPass);
+	Flash.setSSID(newSSID);
+	Flash.setPassword(newPass);
 
 	server.send(200, "text/plain", "succes");
 
@@ -192,8 +193,8 @@ void handleDisconnect() {
 	server.send(200, "text/html", msg);
 
 	delay(200);
-	Flash::setSSID("");
-	Flash::setPassword("");
+	Flash.setSSID("");
+	Flash.setPassword("");
 	WiFi.disconnect();
 	ESP.reset();
 }

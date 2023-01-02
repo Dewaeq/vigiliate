@@ -13,18 +13,22 @@
 #define MEM_STATION_ID_START 64
 #define MEM_STATION_ID_END 70
 
-class Flash {
+class FlashClass {
 	private:
-		static String readString(int start, int end);
-		static void writeString(String val, int start, int end);
+		String readString(int start, int end);
+		void writeString(String val, int start, int end);
 	public:
-		static void begin();
-		static String getSSID();
-		static void setSSID(String newSSID);
-		static String getPassword();
-		static void setPassword(String newPassword);
-		static String getStationID();
-		static void setStationID(String newStationID);
+		void begin();
+		String getSSID();
+		void setSSID(String newSSID);
+		String getPassword();
+		void setPassword(String newPassword);
+		String getStationID();
+		void setStationID(String newStationID);
 };
+
+#if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_FLASH)
+extern FlashClass Flash;
+#endif
 
 // #endif
