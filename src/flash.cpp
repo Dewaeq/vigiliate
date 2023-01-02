@@ -5,6 +5,8 @@
 
 void FlashClass::begin() {
 	EEPROM.begin(70);
+
+	stationID = getStationID();
 }
 
 String FlashClass::readString(int start, int end) {

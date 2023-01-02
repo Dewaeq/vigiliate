@@ -17,14 +17,15 @@ class FlashClass {
 	private:
 		String readString(int start, int end);
 		void writeString(String val, int start, int end);
+		String getStationID();
+		void setStationID(String newStationID);
 	public:
 		void begin();
 		String getSSID();
 		void setSSID(String newSSID);
 		String getPassword();
 		void setPassword(String newPassword);
-		String getStationID();
-		void setStationID(String newStationID);
+		String stationID;
 };
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_FLASH)
