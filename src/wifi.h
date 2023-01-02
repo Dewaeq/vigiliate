@@ -10,20 +10,25 @@ struct Credentials {
     String ssid;
     String password;
 
+    Credentials() {};
     Credentials(String s, String p) : ssid(s), password(p) {};
 };
 
 struct Connection {
     IPAddress ip;
     Credentials credentials;
+    bool isAP;
 
-    Connection(IPAddress addr, Credentials creds): ip(addr), credentials(creds) {};
+    Connection() {};
+    Connection(IPAddress ip, Credentials creds, bool isAP): ip(ip), credentials(creds), isAP(isAP) {};
 };
 
 class WifiClass {
     public:
+        WifiClass() {};
+        struct Connection connection;
         // login with the saved credentials, if unsuccessful, start an AP
-        Connection autoConfig();
+        void autoConfig();
         IPAddress getIP();
         String getSSID();
         bool isConnected();
