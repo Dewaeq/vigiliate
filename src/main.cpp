@@ -127,7 +127,5 @@ void setStatus() {
 	Gui.appendStatus(ip);
 	Gui.appendStatus(ssid, true);
 
-	Serial.printf("Gui status: %s", Gui.status);
-
 	Gui.show();
 }

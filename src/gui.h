@@ -27,11 +27,10 @@ class GuiClass {
         void appendStatus(const String &status, bool newLine = false);
         void appendBody(const char *body, bool newLine = false);
         void appendBody(const String &body, bool newLine = false);
-        char status[STATUS_SIZE];
     private:
         Adafruit_SSD1306 display = Adafruit_SSD1306(DISPL_WIDTH, DISPL_HEIGHT, DISPL_MOSI, DISPL_CLK,
 						 DISPL_DC, DISPL_RES, DISPL_CS);
-
+        char status[STATUS_SIZE];
         char body[BODY_SIZE];
         void showStatus();
         void showBody();
