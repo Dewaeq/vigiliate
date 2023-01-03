@@ -7,11 +7,11 @@
 #define DISPL_HEIGHT 64
 #define STATUS_HEIGHT 15
 
-#define DISPL_MOSI 13 // D7
-#define DISPL_CLK 14  // D5
-#define DISPL_RES 2	  // D4
-#define DISPL_DC 0	  // D3
-#define DISPL_CS 15	  // D8
+#define DISPL_MOSI D7
+#define DISPL_CLK D5
+#define DISPL_RES D4
+#define DISPL_DC D6
+#define DISPL_CS D8
 
 #define STATUS_SIZE 48
 #define BODY_SIZE 144
