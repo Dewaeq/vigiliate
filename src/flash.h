@@ -13,16 +13,16 @@
 
 class FlashClass {
 	private:
-		String readString(int start, int end);
-		void writeString(String val, int start, int end);
+		void readString(char *buffer, int start, int end);
+		void writeString(const String &val, int start, int end);
 		String getStationID();
-		void setStationID(String newStationID);
+		void setStationID(const String &newStationID);
 	public:
 		void begin();
 		String getSSID();
-		void setSSID(String newSSID);
+		void setSSID(const String &newSSID);
 		String getPassword();
-		void setPassword(String newPassword);
+		void setPassword(const String &newPassword);
 		String stationID;
 };
 

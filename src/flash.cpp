@@ -7,23 +7,27 @@ void FlashClass::begin() {
 	EEPROM.begin(70);
 
 	stationID = getStationID();
+	// char *result = getStationID();
+	// strcpy(stationID, result);
 }
 
-String FlashClass::readString(int start, int end) {
-	String result;
+void FlashClass::readString(char *buffer, int start, int end) {
+	int last = end - start;
+
 	for (int i = start; i < end; i++) {
 		int val = EEPROM.read(i);
 		if (val == 0 || val == 255) {
+			last = i - start;
 			break;
 		}
 
-		result += char(val);
+		buffer[i - start] = char(val);
 	}
 
-	return result;
+	buffer[last] = '\0';
 }
 
-void FlashClass::writeString(String val, int start, int end) {
+void FlashClass::writeString(const String &val, int start, int end) {
 	uint8_t size = val.length();
 	for (int i = start; i < end; i++) {
 		if (i - start < size) {
@@ -37,10 +41,13 @@ void FlashClass::writeString(String val, int start, int end) {
 }
 
 String FlashClass::getSSID() {
-	return readString(MEM_SSID_START, MEM_SSID_END);
+	char buffer[32];
+	readString(buffer, MEM_SSID_START, MEM_SSID_END);
+
+	return String(buffer);
 }
 
-void FlashClass::setSSID(String newSSID) {
+void FlashClass::setSSID(const String &newSSID) {
 	if (newSSID.length() > 32) {
 		Serial.println(F("SSID is too long to store!"));
 		return;
@@ -50,10 +57,13 @@ void FlashClass::setSSID(String newSSID) {
 }
 
 String FlashClass::getPassword() {
-	return readString(MEM_PASS_START, MEM_PASS_END);
+	char buffer[32];
+	readString(buffer, MEM_PASS_START, MEM_PASS_END);
+
+	return String(buffer);
 }
 
-void FlashClass::setPassword(String newPassword) {
+void FlashClass::setPassword(const String &newPassword) {
 	if (newPassword.length() > 32) {
 		Serial.println(F("Password is too long to store!"));
 		return;
@@ -63,19 +73,19 @@ void FlashClass::setPassword(String newPassword) {
 }
 
 String FlashClass::getStationID() {
-	String id = readString(MEM_STATION_ID_START, MEM_STATION_ID_END);
-	if (id == "") {
-		char buffer[7];
-		getRandomString(buffer, 7);
-		id = String(buffer);
+	char buffer[7];
 
-		setStationID(id);
+	readString(buffer, MEM_STATION_ID_START, MEM_STATION_ID_END);
+
+	if (strcmp(buffer, "") == 0) {
+		getRandomString(buffer, 7);
+		setStationID(buffer);
 	}
 
-	return id;
+	return String(buffer);
 }
 
-void FlashClass::setStationID(String newStationID) {
+void FlashClass::setStationID(const String &newStationID) {
 	writeString(newStationID, MEM_STATION_ID_START, MEM_STATION_ID_END);
 }
 
