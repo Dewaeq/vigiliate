@@ -6,9 +6,8 @@
 void FlashClass::begin() {
 	EEPROM.begin(70);
 
-	stationID = getStationID();
-	// char *result = getStationID();
-	// strcpy(stationID, result);
+	char *result = getStationID();
+	strcpy(stationID, result);
 }
 
 void FlashClass::readString(char *buffer, int start, int end) {
@@ -40,11 +39,11 @@ void FlashClass::writeString(const String &val, int start, int end) {
 	EEPROM.commit();
 }
 
-String FlashClass::getSSID() {
-	char buffer[32];
+char *FlashClass::getSSID() {
+	static char buffer[32];
 	readString(buffer, MEM_SSID_START, MEM_SSID_END);
 
-	return String(buffer);
+	return buffer;
 }
 
 void FlashClass::setSSID(const String &newSSID) {
@@ -56,11 +55,11 @@ void FlashClass::setSSID(const String &newSSID) {
 	writeString(newSSID, MEM_SSID_START, MEM_SSID_END);
 }
 
-String FlashClass::getPassword() {
-	char buffer[32];
+char *FlashClass::getPassword() {
+	static char buffer[32];
 	readString(buffer, MEM_PASS_START, MEM_PASS_END);
 
-	return String(buffer);
+	return buffer;
 }
 
 void FlashClass::setPassword(const String &newPassword) {
@@ -72,8 +71,8 @@ void FlashClass::setPassword(const String &newPassword) {
 	writeString(newPassword, MEM_PASS_START, MEM_PASS_END);
 }
 
-String FlashClass::getStationID() {
-	char buffer[7];
+char *FlashClass::getStationID() {
+	static char buffer[7];
 
 	readString(buffer, MEM_STATION_ID_START, MEM_STATION_ID_END);
 
@@ -82,7 +81,7 @@ String FlashClass::getStationID() {
 		setStationID(buffer);
 	}
 
-	return String(buffer);
+	return buffer;
 }
 
 void FlashClass::setStationID(const String &newStationID) {

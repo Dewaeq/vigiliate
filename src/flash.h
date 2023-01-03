@@ -15,15 +15,15 @@ class FlashClass {
 	private:
 		void readString(char *buffer, int start, int end);
 		void writeString(const String &val, int start, int end);
-		String getStationID();
+		char *getStationID();
 		void setStationID(const String &newStationID);
 	public:
 		void begin();
-		String getSSID();
+		char *getSSID();
 		void setSSID(const String &newSSID);
-		String getPassword();
+		char *getPassword();
 		void setPassword(const String &newPassword);
-		String stationID;
+		char stationID[7];
 };
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_FLASH)

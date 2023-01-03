@@ -16,6 +16,7 @@ class Json {
         void open();
         void close();
         void addKeyValue(String key, String value);
+        void addKeyValue(String key, const char *value);
         void addKeyValue(String key, float value);
         void addKeyValue(String key, bool value);
         String build();

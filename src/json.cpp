@@ -30,6 +30,11 @@ void Json::addKeyValue(String key, bool value) {
     this->addKeyValuePair(key, newValue);
 }
 
+void Json::addKeyValue(String key, const char *value) {
+    String newValue = String(value);
+    addKeyValue(key, newValue);
+}
+
 void Json::addKeyValuePair(String key, String value) {
     if (this->lastOperation == Operation::AddKeyValue) {
         this->content += ",";
