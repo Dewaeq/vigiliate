@@ -1,21 +1,11 @@
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
 #include <Arduino.h>
-#include <EEPROM.h>
-#include <ESP8266WebServer.h>
-#include <ESP8266WiFi.h>
-#include <SPI.h>
 #include "main.h"
 #include "html.h"
 #include "flash.h"
-#include "utils.h"
 #include "json.h"
 #include "wifi.h"
 #include "webserver.h"
 #include "gui.h"
-
-Adafruit_SSD1306 display(DISPL_WIDTH, DISPL_HEIGHT, DISPL_MOSI, DISPL_CLK,
-						 DISPL_DC, DISPL_RES, DISPL_CS);
 
 float temp;
 float hum;
@@ -26,12 +16,6 @@ void setup() {
 	Serial.begin(9600);
 	Flash.begin();
 	Gui.begin();
-
-	if (!display.begin()) {
-		Serial.println(F("Failed to connect to display!"));
-		for (;;)
-			;
-	}
 
 	delay(500);
 
