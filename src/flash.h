@@ -15,8 +15,9 @@ class FlashClass {
 	private:
 		void readString(char *buffer, int start, int end);
 		void writeString(const String &val, int start, int end);
+		void writeString(const char *val, int start, int end);
 		char *getStationID();
-		void setStationID(const String &newStationID);
+		void setStationID(const char *newStationID);
 	public:
 		void begin();
 		char *getSSID();

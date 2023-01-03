@@ -7,11 +7,11 @@
 #define AP_SSID "Station Config"
 
 struct Credentials {
-    String ssid;
-    String password;
+    char ssid[32];
+    char password[32];
 
     Credentials() {};
-    Credentials(String s, String p) : ssid(s), password(p) {};
+    Credentials(const char *ssid, const char *password);
 };
 
 struct Connection {
@@ -30,7 +30,7 @@ class WifiClass {
         // login with the saved credentials, if unsuccessful, start an AP
         void autoConfig();
         IPAddress getIP();
-        String getSSID();
+        char *getSSID();
         bool isConnected();
         // connect from api request
         void connect();

@@ -5,6 +5,11 @@
 #include "gui.h"
 #include <ESP8266WiFi.h>
 
+Credentials::Credentials(const char *ssid, const char *password) {
+    strcpy(this->ssid, ssid);
+    strcpy(this->password, password);
+}
+
 void WifiClass::autoConfig() {
     Gui.appendBody("Loading Wifi credentials...\n");
     Gui.show();
@@ -32,12 +37,17 @@ IPAddress WifiClass::getIP() {
 	}
 }
 
-String WifiClass::getSSID() {
+char *WifiClass::getSSID() {
+    static char buffer[32];
+
 	if (WiFi.getMode() == WIFI_STA) {
-		return WiFi.SSID();
+		String ssid =  WiFi.SSID();
+        ssid.toCharArray(buffer, 32);
 	} else {
-		return AP_SSID;
+		strcpy(buffer, AP_SSID);
 	}
+
+    return buffer;
 }
 
 bool WifiClass::isConnected() {
@@ -45,15 +55,15 @@ bool WifiClass::isConnected() {
 }
 
 Credentials WifiClass::getStoredCredentials() {
-    String ssid = Flash.getSSID();
-	String password = Flash.getPassword();
+    char *ssid = Flash.getSSID();
+	char *password = Flash.getPassword();
 
     return Credentials(ssid, password);
 }
 
 bool WifiClass::testWifi(Credentials credentials) {
     Gui.appendBody("Connecting to ");
-    Gui.appendBody(credentials.ssid.c_str(), true);
+    Gui.appendBody(credentials.ssid, true);
     Gui.show();
 
     WiFi.begin(credentials.ssid, credentials.password);
@@ -89,7 +99,7 @@ Credentials WifiClass::startAP() {
     Serial.printf("AP password: %s\n", password);
     Gui.show();
 
-    return Credentials(AP_SSID, String(password));
+    return Credentials(AP_SSID, password);
 }
 
 void WifiClass::connect() {

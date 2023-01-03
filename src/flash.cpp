@@ -39,6 +39,19 @@ void FlashClass::writeString(const String &val, int start, int end) {
 	EEPROM.commit();
 }
 
+void FlashClass::writeString(const char *val, int start, int end) {
+	uint8_t size = strlen(val);
+	for (int i = start; i < end; i++) {
+		if (i - start < size) {
+			EEPROM.write(i, val[i - start]);
+		} else {
+			EEPROM.write(i, 0);
+		}
+	}
+
+	EEPROM.commit();
+}
+
 char *FlashClass::getSSID() {
 	static char buffer[32];
 	readString(buffer, MEM_SSID_START, MEM_SSID_END);
@@ -84,7 +97,7 @@ char *FlashClass::getStationID() {
 	return buffer;
 }
 
-void FlashClass::setStationID(const String &newStationID) {
+void FlashClass::setStationID(const char *newStationID) {
 	writeString(newStationID, MEM_STATION_ID_START, MEM_STATION_ID_END);
 }
 
