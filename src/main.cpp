@@ -6,6 +6,7 @@
 #include "wifi.h"
 #include "webserver.h"
 #include "gui.h"
+#include "sensors/sensors.h"
 
 float temp;
 float hum;
@@ -14,12 +15,12 @@ float pm10;
 
 void setup() {
 	Serial.begin(9600);
+	Serial.println();
 	Flash.begin();
 	Gui.begin();
+	Sensors.begin();
 
 	delay(500);
-
-	Serial.println();
 
 	Wifi.autoConfig();
 	setStatus();
@@ -31,6 +32,7 @@ void setup() {
 
 void loop() {
 	WebServer.handle();
+	Sensors.update();
 }
 
 void setupWebServer() {
