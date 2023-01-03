@@ -2,7 +2,7 @@
 #include <Arduino.h>
 
 void GuiClass::begin() {
-    if (!display.begin()) {
+    if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3c)) {
         Serial.println(F("Failed to connect to display!"));
         for (;;);
     }
