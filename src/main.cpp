@@ -8,11 +8,6 @@
 #include "gui.h"
 #include "sensors/sensors.h"
 
-float temp;
-float hum;
-float pm25;
-float pm10;
-
 void setup() {
 	Serial.begin(9600);
 	Serial.println();
@@ -28,7 +23,6 @@ void setup() {
 	Serial.println(F("Setting server"));
 	setupWebServer();
 }
-
 
 void loop() {
 	WebServer.handle();
@@ -78,12 +72,12 @@ void handleDisconnect() {
 }
 
 void handleReadings() {
+	SensorsReading reading = Sensors.getReadings();
+
 	Json json;
 	json.open();
-	json.addKeyValue("temp", temp);
-	json.addKeyValue("hum", hum);
-	json.addKeyValue("pm25", pm25);
-	json.addKeyValue("pm10", pm10);
+	json.addKeyValue("pm25", reading.sds.pm25);
+	json.addKeyValue("pm10", reading.sds.pm10);
 	json.close();
 
 	String response = json.build();
