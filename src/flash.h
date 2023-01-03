@@ -1,7 +1,5 @@
-// Can't use ifndef on this header, or compilation will fail
-// TODO: investigate why this happens (currently clueless)
-// #ifndef FLASH_H
-// #define FLASH_H
+#ifndef VIGILIATE_FLASH_H
+#define VIGILIATE_FLASH_H
 
 #include <Arduino.h>
 
@@ -32,4 +30,4 @@ class FlashClass {
 extern FlashClass Flash;
 #endif
 
-// #endif
+#endif
