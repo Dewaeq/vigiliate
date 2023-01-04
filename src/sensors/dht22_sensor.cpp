@@ -25,9 +25,4 @@ void DHT22Sensor::read() {
         result.temperature = temp;
         result.succes = true;
     }
-
-    Serial.print("Temperature: ");
-    Serial.println(String(result.temperature));
-    Serial.print("Humidity: ");
-    Serial.println(String(result.humitidy));
 }
