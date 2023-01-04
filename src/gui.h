@@ -22,6 +22,7 @@ class GuiClass {
         void appendStatus(const String &status, bool newLine = false);
         void appendBody(const char *body, bool newLine = false);
         void appendBody(const String &body, bool newLine = false);
+        void showError(const char *error);
     private:
         Adafruit_SSD1306 display = Adafruit_SSD1306(DISPL_WIDTH, DISPL_HEIGHT, &Wire);
         char status[STATUS_SIZE];
@@ -35,6 +36,5 @@ class GuiClass {
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_GUI)
 extern GuiClass Gui;
 #endif
-
 
 #endif

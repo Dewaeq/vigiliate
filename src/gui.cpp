@@ -84,6 +84,14 @@ void GuiClass::showBody() {
     display.print(body);
 }
 
+void GuiClass::showError(const char *error) {
+    setStatus("ERROR");
+    setBody(error);
+    
+    display.setTextSize(2);
+    show();
+}
+
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_GUI)
 GuiClass Gui;
 #endif

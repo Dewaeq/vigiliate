@@ -90,7 +90,7 @@ Credentials WifiClass::startAP() {
     bool succes = WiFi.softAP(AP_SSID, password);
     if (!succes) {
         Serial.println(F("ERROR: Failed to start AP"));
-        Gui.appendBody("ERROR: Failed to start AP");
+        Gui.showError("Failed to start AP!");
     } else {
         Gui.setBody("AP is active, connect to continue setup.\nPassword: ");
         Gui.appendBody(password);

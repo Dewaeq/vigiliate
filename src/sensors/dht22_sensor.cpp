@@ -1,4 +1,5 @@
 #include "dht22_sensor.h"
+#include "gui.h"
 
 void DHT22Sensor::begin() {
     sensor.begin();
@@ -24,5 +25,7 @@ void DHT22Sensor::read() {
         result.humitidy = hum;
         result.temperature = temp;
         result.succes = true;
+    } else {
+        Gui.showError("Failed to read from dht22");
     }
 }
