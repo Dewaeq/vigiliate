@@ -1,10 +1,12 @@
 #ifndef SENSORS_H
 #define SENSORS_H
 
-#include "sds011.h"
+#include "sds011_sensor.h"
+#include "dht22_sensor.h"
 
 struct SensorsReading {
     SDS011Reading sds;
+    DHT22Reading dht;
 };
 
 class SensorsClass {
@@ -13,7 +15,8 @@ class SensorsClass {
         void update();
         SensorsReading getReadings();
     private:
-        SDS011 sds;
+        SDS011Sensor sds;
+        DHT22Sensor dht;
 };
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_SENSORS)

@@ -22,9 +22,9 @@ struct SDS011Reading {
 
 enum State { Sleeping, Reading };
 
-class SDS011 {
+class SDS011Sensor {
     public:
-        SDS011() {};
+        SDS011Sensor() {};
         void begin();
         void update();
         bool isSleeping();

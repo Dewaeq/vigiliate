@@ -1,11 +1,11 @@
-#include "sds011.h"
+#include "sds011_sensor.h"
 
-void SDS011::begin() {
+void SDS011Sensor::begin() {
     sensor.begin();
     sensor.setQueryReportingMode();
 }
 
-void SDS011::update() {
+void SDS011Sensor::update() {
     unsigned long currentMillis = millis();
     unsigned long interval = isSleeping() ? SLEEP_TIME : MEASURE_TIME;
 
@@ -24,16 +24,16 @@ void SDS011::update() {
     }
 }
 
-bool SDS011::isSleeping() {
+bool SDS011Sensor::isSleeping() {
     return state == State::Sleeping;
 }
 
-void SDS011::wake() {
+void SDS011Sensor::wake() {
     state = State::Reading;
     sensor.wakeup();
 }
 
-void SDS011::sleep() {
+void SDS011Sensor::sleep() {
     state = State::Sleeping;
 
     WorkingStateResult state = sensor.sleep();
@@ -42,7 +42,7 @@ void SDS011::sleep() {
     }
 }
 
-void SDS011::read() {
+void SDS011Sensor::read() {
     result = SDS011Reading(0, 0, false);
 
     PmResult pm = sensor.queryPm();

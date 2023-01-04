@@ -78,6 +78,8 @@ void handleReadings() {
 	json.open();
 	json.addKeyValue("pm25", reading.sds.pm25);
 	json.addKeyValue("pm10", reading.sds.pm10);
+	json.addKeyValue("temp", reading.dht.temperature);
+	json.addKeyValue("hum", reading.dht.humitidy);
 	json.close();
 
 	const char *response = json.build();
