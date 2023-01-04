@@ -41,7 +41,7 @@ char *WifiClass::getSSID() {
     static char buffer[32];
 
 	if (WiFi.getMode() == WIFI_STA) {
-		String ssid =  WiFi.SSID();
+		const String ssid =  WiFi.SSID();
         ssid.toCharArray(buffer, 32);
 	} else {
 		strcpy(buffer, AP_SSID);
