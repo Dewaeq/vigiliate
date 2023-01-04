@@ -8,7 +8,7 @@ void WebServerClass::begin() {
     });
 }
 
-void WebServerClass::addRoute(const String &route, std::function<void(void)> handler) {
+void WebServerClass::addRoute(const char *route, std::function<void(void)> handler) {
     server.on(route, handler);
 }
 
@@ -16,11 +16,11 @@ void WebServerClass::handleNotFound() {
 	server.send(404, "text/html", "<h1>ERROR: 404</h1>");
 }
 
-bool WebServerClass::hasArg(const String &name) {
+bool WebServerClass::hasArg(const char *name) {
     return server.hasArg(name);
 }
 
-const String &WebServerClass::arg(const String &name) {
+const String &WebServerClass::arg(const char *name) const {
     return server.arg(name);
 }
 

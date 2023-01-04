@@ -6,9 +6,9 @@
 class WebServerClass {
     public:
         void begin();
-        void addRoute(const String &route, std::function<void(void)> handler);
-        bool hasArg(const String &name);
-        const String &arg(const String &name);
+        void addRoute(const char *route, std::function<void(void)> handler);
+        bool hasArg(const char *name);
+        const String &arg(const char *name) const;
         void send(int code, const char *content_type, const char *content);
         void send(int code, const char *content_type, const uint8_t *content, size_t content_length);
         void send(int code, const char *content_type, const String &content);
