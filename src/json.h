@@ -3,6 +3,18 @@
 
 #include <Arduino.h>
 
+#define JSON_BUFFER_SIZE 512
+#define MAX_PAIR_SIZE 128
+#define MAX_FLOAT_SIZE 6
+
+const char TRUE_STR[]  = "true";
+const char FALSE_STR[]  = "false";
+const char COMMA_STR[]  = ",";
+const char BRACKET_OPEN_STR[]  = "{";
+const char BRACKET_CLOSE_STR[]  = "}";
+const char QUOTE_STR[]  = "\"";
+const char KEY_END_STR[]  = "\": ";
+
 enum Operation {
     None,
     OpenObject,
@@ -12,17 +24,18 @@ enum Operation {
 
 class Json {
     public:
-        String content;
         void open();
         void close();
-        void addKeyValue(String key, String value);
-        void addKeyValue(String key, const char *value);
-        void addKeyValue(String key, float value);
-        void addKeyValue(String key, bool value);
-        String build();
+        void addKeyValue(const char *key, const String &value);
+        void addKeyValue(const char *key, const char *value);
+        void addKeyValue(const char *key, float value);
+        void addKeyValue(const char *key, bool value);
+        const char *build();
     private:
-        void addKeyValuePair(String key, String value);
+        char content[JSON_BUFFER_SIZE];
         Operation lastOperation = Operation::None;
+        void addKeyValuePair(const char *key, const char *value);
+        void append(const char *value);
 };
 
 #endif

@@ -1,49 +1,68 @@
-
 #include "json.h"
 
 void Json::open() {
-    if (this->lastOperation == Operation::CloseObject) {
-        this->content += ",";
+    if (lastOperation == Operation::None) {
+        strcpy(content, BRACKET_OPEN_STR);
+    }
+    else if (lastOperation == Operation::CloseObject) {
+        append(COMMA_STR);
+        append(BRACKET_OPEN_STR);
     }
 
-    this->content += "{";
-    this->lastOperation = Operation::OpenObject;
+    lastOperation = Operation::OpenObject;
 }
 
 void Json::close() {
-    this->content += "}";
-    this->lastOperation = Operation::CloseObject;
+    append(BRACKET_CLOSE_STR);
+    lastOperation = Operation::CloseObject;
 }
 
-void Json::addKeyValue(String key, String value) {
-    String newValue = '"' + value + '"';
-    this->addKeyValuePair(key, newValue);
+void Json::addKeyValue(const char *key, const String &value) {
+    char buffer[MAX_PAIR_SIZE];
+    value.toCharArray(buffer, MAX_PAIR_SIZE);
+
+    addKeyValue(key, buffer);
 }
 
-void Json::addKeyValue(String key, float value) {
-    String newValue = String(value);
-    this->addKeyValuePair(key, newValue);
+void Json::addKeyValue(const char *key, float value) {
+    char buffer[MAX_FLOAT_SIZE];
+    dtostrf(value, MAX_FLOAT_SIZE, 2, buffer);
+
+    addKeyValuePair(key, buffer);
 }
 
-void Json::addKeyValue(String key, bool value) {
-    String newValue = value ? "true" : "false";
-    this->addKeyValuePair(key, newValue);
+void Json::addKeyValue(const char *key, bool value) {
+    const char *newValue = value ? TRUE_STR : FALSE_STR;
+    addKeyValuePair(key, newValue);
 }
 
-void Json::addKeyValue(String key, const char *value) {
-    String newValue = String(value);
-    addKeyValue(key, newValue);
+void Json::addKeyValue(const char *key, const char *value) {
+    char buffer[MAX_PAIR_SIZE];
+
+    strcpy(buffer, QUOTE_STR);
+    strcat(buffer, value);
+    strcat(buffer, QUOTE_STR);
+
+    addKeyValuePair(key, buffer);
 }
 
-void Json::addKeyValuePair(String key, String value) {
-    if (this->lastOperation == Operation::AddKeyValue) {
-        this->content += ",";
+void Json::addKeyValuePair(const char *key, const char *value) {
+    if (lastOperation == Operation::AddKeyValue) {
+        append(COMMA_STR);
     }
 
-    this->content += "\"" + key + "\": " + value;
-    this->lastOperation = Operation::AddKeyValue;
+    append(QUOTE_STR);
+    append(key);
+    append(KEY_END_STR);
+    append(value);
+
+    lastOperation = Operation::AddKeyValue;
 }
 
-String Json::build() {
-    return this->content;
+void Json::append(const char *value) {
+    strcat(content, value);
+}
+
+const char *Json::build() {
+    return content;
 }

@@ -80,7 +80,7 @@ void handleReadings() {
 	json.addKeyValue("pm10", reading.sds.pm10);
 	json.close();
 
-	String response = json.build();
+	const char *response = json.build();
 
 	WebServer.send(200, "application/json", response);
 }
@@ -94,14 +94,14 @@ void handleStatus() {
 	json.addKeyValue("ssid", Wifi.getSSID());
 	json.close();
 
-	String response = json.build();
+	const char *response = json.build();
 
 	WebServer.send(200, "application/json", response);
 }
 
 void setStatus() {
 	String ip = Wifi.getIP().toString();
-	String ssid = Wifi.getSSID();
+	const char *ssid = Wifi.getSSID();
 
 	Gui.setStatus("");
 	Gui.appendStatus(ip);
