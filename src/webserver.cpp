@@ -2,6 +2,7 @@
 
 void WebServerClass::begin() {
     server.begin();
+    server.enableCORS(true);
 
     server.onNotFound([]() {
         WebServer.handleNotFound();
@@ -38,10 +39,6 @@ void WebServerClass::send(int code, const char *content_type, const String &cont
 
 void WebServerClass::sendHeader(const char *name, const char *value) {
     server.sendHeader(name, value);
-}
-
-void WebServerClass::enableCORS() {
-    server.enableCORS(true);
 }
 
 void WebServerClass::handle() {

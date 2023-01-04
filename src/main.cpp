@@ -35,7 +35,6 @@ void setupWebServer() {
 	Serial.print(F("Server is active on: "));
 	Serial.println(ip.toString());
 
-	WebServer.enableCORS();
 	WebServer.begin();
 
 	WebServer.addRoute("/", handleRoot);

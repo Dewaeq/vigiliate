@@ -13,7 +13,6 @@ class WebServerClass {
         void send(int code, const char *content_type, const uint8_t *content, size_t content_length);
         void send(int code, const char *content_type, const String &content);
         void sendHeader(const char *name, const char *value);
-        void enableCORS();
         void handle();
     private:
         ESP8266WebServer server = ESP8266WebServer(80);
