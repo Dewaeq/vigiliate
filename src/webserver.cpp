@@ -1,6 +1,9 @@
 #include "webserver.h"
+#include "routes.h"
 
 void WebServerClass::begin() {
+    routes::begin();
+
     server.begin();
     server.enableCORS(true);
 
