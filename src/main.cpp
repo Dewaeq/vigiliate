@@ -15,6 +15,7 @@ void setup() {
 
 	delay(500);
 
+	Gui.setStatus("Initiasing");
 	Wifi.autoConfig();
 	setStatus();
 

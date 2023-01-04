@@ -88,8 +88,14 @@ void GuiClass::showError(const char *error) {
     setStatus("ERROR");
     setBody(error);
     
+    display.clearDisplay();
+
+    showBody();
+    showStatusLine();
     display.setTextSize(2);
-    show();
+    showStatus();
+
+    display.display();
 }
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_GUI)
