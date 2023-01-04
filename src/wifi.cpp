@@ -15,10 +15,10 @@ void WifiClass::autoConfig() {
     Gui.show();
 
     Credentials credentials = getStoredCredentials();
-    bool succes = testWifi(credentials);
+    bool success = testWifi(credentials);
     bool isAP = false;
 
-    if (!succes) {
+    if (!success) {
         credentials = startAP();
         isAP = true;
     } else {
@@ -87,8 +87,8 @@ Credentials WifiClass::startAP() {
     char password[9];
     getRandomString(password, 9);
 
-    bool succes = WiFi.softAP(AP_SSID, password);
-    if (!succes) {
+    bool success = WiFi.softAP(AP_SSID, password);
+    if (!success) {
         Serial.println(F("ERROR: Failed to start AP"));
         Gui.showError("Failed to start AP!");
     } else {

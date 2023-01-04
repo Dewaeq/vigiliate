@@ -14,10 +14,10 @@
 struct SDS011Reading {
     float pm25;
     float pm10;
-    bool succes;
+    bool success;
 
     SDS011Reading() {};
-    SDS011Reading(float pm25, float pm10, bool succes): pm25(pm25), pm10(pm10), succes(succes) {};
+    SDS011Reading(float pm25, float pm10, bool success): pm25(pm25), pm10(pm10), success(success) {};
 };
 
 enum State { Sleeping, Reading };

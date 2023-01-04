@@ -11,10 +11,10 @@
 struct DHT22Reading {
     float humitidy;
     float temperature;
-    bool succes;
+    bool success;
 
     DHT22Reading() {};
-    DHT22Reading(float hum, float temp, bool succes): humitidy(hum), temperature(temp), succes(succes) {};
+    DHT22Reading(float hum, float temp, bool success): humitidy(hum), temperature(temp), success(success) {};
 };
 
 class DHT22Sensor {

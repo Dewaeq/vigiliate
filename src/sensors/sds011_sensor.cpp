@@ -52,7 +52,7 @@ void SDS011Sensor::read() {
     if (pm.isOk()) {
         result.pm10 = pm.pm10;
         result.pm25 = pm.pm25;
-        result.succes = true;
+        result.success = true;
     } else {
         Gui.showError("Failed to read from sds011");
     }

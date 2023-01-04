@@ -24,7 +24,7 @@ void DHT22Sensor::read() {
     if (!isnan(hum) && !isnan(temp)) {
         result.humitidy = hum;
         result.temperature = temp;
-        result.succes = true;
+        result.success = true;
     } else {
         Gui.showError("Failed to read from dht22");
     }
