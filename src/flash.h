@@ -15,7 +15,7 @@
 #define MAX_SSID_SIZE MEM_SSID_END - MEM_SSID_START
 #define MAX_PASS_SIZE MEM_PASS_END - MEM_PASS_START
 
-#define MEM_SIZE 70
+#define FLASH_MEM_SIZE 70
 
 class FlashClass {
 	private:

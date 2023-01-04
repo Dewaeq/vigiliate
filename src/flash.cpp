@@ -1,10 +1,11 @@
 #include "flash.h"
 #include "utils.h"
+#include "gui.h"
 #include <EEPROM.h>
 #include <Arduino.h>
 
 void FlashClass::begin() {
-	EEPROM.begin(MEM_SIZE);
+	EEPROM.begin(FLASH_MEM_SIZE);
 
 	char *result = getStationID();
 	strcpy(stationID, result);
@@ -63,6 +64,7 @@ void FlashClass::setSSID(const String &newSSID) {
 	// must be smaller than max in order to reserve space for the null byte
 	if (newSSID.length() >= MAX_SSID_SIZE) {
 		Serial.println(F("SSID is too long to store!"));
+		Gui.showError("SSID is too long to store!");
 		return;
 	}
 	
@@ -80,6 +82,7 @@ void FlashClass::setPassword(const String &newPassword) {
 	// must be smaller than max in order to reserve space for the null byte
 	if (newPassword.length() >= MAX_PASS_SIZE) {
 		Serial.println(F("Password is too long to store!"));
+		Gui.showError("Password is too long to store!");
 		return;
 	}
 	
