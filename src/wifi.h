@@ -34,6 +34,7 @@ class WifiClass {
         bool isConnected();
         // connect from api request
         void connect();
+        void disconnect();
     private:
         Credentials getStoredCredentials();
         bool testWifi(Credentials credentials);

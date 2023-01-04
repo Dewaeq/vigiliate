@@ -125,6 +125,20 @@ void WifiClass::connect() {
 	ESP.reset();
 }
 
+void WifiClass::disconnect() {
+    Serial.println("____disconnect____");
+	Gui.setBody("Disconnecting WiFi...");
+
+	WebServer.send(200, "text/plain", "succes");
+
+	delay(200);
+
+	Flash.setSSID("");
+	Flash.setPassword("");
+	WiFi.disconnect();
+	ESP.reset();
+}
+
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_WIFI)
 WifiClass Wifi;
 #endif

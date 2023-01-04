@@ -41,7 +41,9 @@ void setupWebServer() {
 	WebServer.addRoute("/connect", []() {
 		Wifi.connect();
 	});
-	WebServer.addRoute("/disconnect", handleDisconnect);
+	WebServer.addRoute("/disconnect", []() {
+		Wifi.disconnect();
+	});
 	WebServer.addRoute("/api/readings", handleReadings);
 	WebServer.addRoute("/api/status", handleStatus);
 
@@ -54,20 +56,6 @@ void handleRoot() {
 
 	WebServer.sendHeader("Content-Encoding", "gzip");
 	WebServer.send(200, "text/html", index_html, html_size);
-}
-
-void handleDisconnect() {
-	Serial.println("____disconnect____");
-	Gui.setBody("Disconnecting WiFi...");
-
-	WebServer.send(200, "text/plain", "succes");
-
-	delay(200);
-
-	Flash.setSSID("");
-	Flash.setPassword("");
-	WiFi.disconnect();
-	ESP.reset();
 }
 
 void handleReadings() {
