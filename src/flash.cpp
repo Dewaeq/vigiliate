@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 void FlashClass::begin() {
-	EEPROM.begin(70);
+	EEPROM.begin(MEM_SIZE);
 
 	char *result = getStationID();
 	strcpy(stationID, result);
@@ -53,14 +53,15 @@ void FlashClass::writeString(const char *val, int start, int end) {
 }
 
 char *FlashClass::getSSID() {
-	static char buffer[32];
+	static char buffer[MAX_SSID_SIZE];
 	readString(buffer, MEM_SSID_START, MEM_SSID_END);
 
 	return buffer;
 }
 
 void FlashClass::setSSID(const String &newSSID) {
-	if (newSSID.length() > 32) {
+	// must be smaller than max in order to reserve space for the null byte
+	if (newSSID.length() >= MAX_SSID_SIZE) {
 		Serial.println(F("SSID is too long to store!"));
 		return;
 	}
@@ -69,14 +70,15 @@ void FlashClass::setSSID(const String &newSSID) {
 }
 
 char *FlashClass::getPassword() {
-	static char buffer[32];
+	static char buffer[MAX_PASS_SIZE];
 	readString(buffer, MEM_PASS_START, MEM_PASS_END);
 
 	return buffer;
 }
 
 void FlashClass::setPassword(const String &newPassword) {
-	if (newPassword.length() > 32) {
+	// must be smaller than max in order to reserve space for the null byte
+	if (newPassword.length() >= MAX_PASS_SIZE) {
 		Serial.println(F("Password is too long to store!"));
 		return;
 	}
@@ -86,7 +88,6 @@ void FlashClass::setPassword(const String &newPassword) {
 
 char *FlashClass::getStationID() {
 	static char buffer[7];
-
 	readString(buffer, MEM_STATION_ID_START, MEM_STATION_ID_END);
 
 	if (strcmp(buffer, "") == 0) {

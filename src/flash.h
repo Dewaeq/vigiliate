@@ -11,6 +11,12 @@
 #define MEM_STATION_ID_START 64
 #define MEM_STATION_ID_END 70
 
+// subtract one for null byte
+#define MAX_SSID_SIZE MEM_SSID_END - MEM_SSID_START
+#define MAX_PASS_SIZE MEM_PASS_END - MEM_PASS_START
+
+#define MEM_SIZE 70
+
 class FlashClass {
 	private:
 		void readString(char *buffer, int start, int end);
