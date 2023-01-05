@@ -6,12 +6,8 @@ void DHT22Sensor::begin() {
 }
 
 void DHT22Sensor::update() {
-    unsigned long currentMillis = millis();
-
-    if (currentMillis - previousMillis >= SLEEP_TIME) {
+    if (timer.isOver()) {
         read();
-        
-        previousMillis = currentMillis;
     }
 }
 

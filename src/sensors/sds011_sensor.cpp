@@ -4,13 +4,11 @@
 void SDS011Sensor::begin() {
     sensor.begin();
     sensor.setQueryReportingMode();
+    wake();
 }
 
 void SDS011Sensor::update() {
-    unsigned long currentMillis = millis();
-    unsigned long interval = isSleeping() ? SLEEP_TIME : MEASURE_TIME;
-
-    if (currentMillis - previousMillis >= interval) {
+    if (timer.isOver()) {
         // stop sleep and start reading
         if (isSleeping()) {
             wake();
@@ -20,8 +18,6 @@ void SDS011Sensor::update() {
             read();
             sleep();
         }
-
-        previousMillis = currentMillis;
     }
 }
 
@@ -31,15 +27,17 @@ bool SDS011Sensor::isSleeping() {
 
 void SDS011Sensor::wake() {
     state = State::Reading;
+    timer.setInterval(SDS_MEASURE_TIME);
     sensor.wakeup();
 }
 
 void SDS011Sensor::sleep() {
     state = State::Sleeping;
+    timer.setInterval(SDS_SLEEP_TIME);
 
     WorkingStateResult state = sensor.sleep();
     if (state.isWorking()) {
-        Serial.println("Failed to make sds011 sensor sleep!");
+        Serial.println(F("Failed to make sds011 sensor sleep!"));
         Gui.showError("Failed to make sds011 sleep");
     }
 }

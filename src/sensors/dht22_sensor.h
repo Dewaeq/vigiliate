@@ -2,11 +2,12 @@
 #define DHT22_H
 
 #include <DHT.h>
+#include "timer.h"
 
 #define SENSOR_PIN D6
 #define SENSOR_TYPE DHT22
 
-#define SLEEP_TIME 10 * 1000
+#define DHT_SLEEP_TIME 10 * 1000
 
 struct DHT22Reading {
     float humitidy;
@@ -25,7 +26,7 @@ class DHT22Sensor {
         DHT22Reading result;
     private:
         DHT sensor = DHT(SENSOR_PIN, SENSOR_TYPE);
-        unsigned long previousMillis;
+        Timer timer = Timer(DHT_SLEEP_TIME);
         void read();
 };
 
