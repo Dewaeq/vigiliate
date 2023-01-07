@@ -4,6 +4,9 @@
 void SDS011Sensor::begin() {
     sensor.begin();
     sensor.setQueryReportingMode();
+
+    delay(500);
+
     wake();
 }
 
