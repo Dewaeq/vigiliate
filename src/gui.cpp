@@ -62,6 +62,7 @@ void GuiClass::appendBody(const String &body, bool newLine) {
 
 void GuiClass::show() {
     display.clearDisplay();
+    setDefaults();
 
     showStatus();
     showStatusLine();
@@ -85,11 +86,12 @@ void GuiClass::showBody() {
 }
 
 void GuiClass::showError(const char *error) {
+    display.clearDisplay();
+    setDefaults();
+    
     setStatus("ERROR");
     setBody(error);
     
-    display.clearDisplay();
-
     showBody();
     showStatusLine();
     display.setTextSize(2);
