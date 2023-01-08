@@ -9,6 +9,7 @@ void GuiClass::begin() {
 
     setDefaults();
     clear();
+    display.display();
 }
 
 void GuiClass::setDefaults() {
@@ -19,18 +20,30 @@ void GuiClass::setDefaults() {
 
 void GuiClass::clear() {
     display.clearDisplay();
-    display.display();
+    setDefaults();
 }
 
 void GuiClass::setStatus(const char *status) {
+    if (hasError) {
+        return;
+    }
+
     strcpy(this->status, status);
 }
 
 void GuiClass::setBody(const char *body) {
+    if (hasError) {
+        return;
+    }
+
     strcpy(this->body, body);
 }
 
 void GuiClass::appendStatus(const char *status, bool newLine) {
+    if (hasError) {
+        return;
+    }
+
     if (newLine) {
         strcat(this->status, "\n");
     }
@@ -46,6 +59,10 @@ void GuiClass::appendStatus(const String &status, bool newLine) {
 }
 
 void GuiClass::appendBody(const char *body, bool newLine) {
+    if (hasError) {
+        return;
+    }
+
     if (newLine) {
         strcat(this->body, "\n");
     }
@@ -61,17 +78,18 @@ void GuiClass::appendBody(const String &body, bool newLine) {
 }
 
 void GuiClass::show() {
-    display.clearDisplay();
-    setDefaults();
-
-    showStatus();
-    showStatusLine();
+    clear();
     showBody();
+    showStatusLine();
+    showStatus();
 
     display.display();
 }
 
 void GuiClass::showStatus() {
+    if (hasError) {
+        display.setTextSize(2);
+    }
     display.setCursor(0, 0);
     display.print(status);
 }
@@ -86,18 +104,10 @@ void GuiClass::showBody() {
 }
 
 void GuiClass::showError(const char *error) {
-    display.clearDisplay();
-    setDefaults();
-    
     setStatus("ERROR");
     setBody(error);
-    
-    showBody();
-    showStatusLine();
-    display.setTextSize(2);
-    showStatus();
-
-    display.display();
+    hasError = true;
+    show();
 }
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_GUI)

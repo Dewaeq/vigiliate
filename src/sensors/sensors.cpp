@@ -9,13 +9,14 @@ void SensorsClass::begin() {
 void SensorsClass::update() {
     sds.update();
     dht.update();
-    getReadings();
+
+    if (timer.isOver()) {
+        showReadings();
+    }
 }
 
-SensorsReading SensorsClass::getReadings() {
-    SensorsReading reading;
-    reading.sds = sds.result;
-    reading.dht = dht.result;
+void SensorsClass::showReadings() {
+    SensorsReading reading = getReadings();
 
     Gui.setBody("Temp: ");
     Gui.appendBody(String(reading.dht.temperature));
@@ -26,10 +27,15 @@ SensorsReading SensorsClass::getReadings() {
     Gui.appendBody("PM10: ", true);
     Gui.appendBody(String(reading.sds.pm10));
     Gui.show();
+}
+
+SensorsReading SensorsClass::getReadings() {
+    SensorsReading reading;
+    reading.sds = sds.result;
+    reading.dht = dht.result;
 
     return reading;
 }
-
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_SENSORS)
 SensorsClass Sensors;

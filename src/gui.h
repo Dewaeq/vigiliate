@@ -27,6 +27,7 @@ class GuiClass {
         Adafruit_SSD1306 display = Adafruit_SSD1306(DISPL_WIDTH, DISPL_HEIGHT, &Wire);
         char status[STATUS_SIZE];
         char body[BODY_SIZE];
+        bool hasError = false;
         void showStatus();
         void showBody();
         void showStatusLine();

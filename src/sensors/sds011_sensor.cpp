@@ -40,7 +40,6 @@ void SDS011Sensor::sleep() {
 
     WorkingStateResult state = sensor.sleep();
     if (state.isWorking()) {
-        Serial.println(F("Failed to make sds011 sensor sleep!"));
         Gui.showError("Failed to make sds011 sleep");
     }
 }
