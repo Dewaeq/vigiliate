@@ -19,6 +19,8 @@ class ApiClass {
         WiFiClient client;
         Timer timer = Timer(API_POST_DELAY);
         const char *getPostReadingUrl();
+        const char *getReadingsJson();
+        const char *getStatusJson();
 };
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_API)
