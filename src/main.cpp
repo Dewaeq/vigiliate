@@ -4,6 +4,7 @@
 #include "wifi.h"
 #include "webserver.h"
 #include "gui.h"
+#include "api.h"
 #include "sensors/sensors.h"
 
 void setup() {
@@ -25,6 +26,7 @@ void setup() {
 
 void loop() {
 	WebServer.handle();
+	Api.update();
 	Sensors.update();
 }
 
