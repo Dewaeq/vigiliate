@@ -36,6 +36,10 @@ void Json::addKeyValue(const char *key, bool value) {
     addKeyValuePair(key, newValue);
 }
 
+void Json::addKeyValue(const char *key) {
+    addKeyValuePair(key, "null");
+}
+
 void Json::addKeyValue(const char *key, const char *value) {
     char buffer[MAX_PAIR_SIZE];
 

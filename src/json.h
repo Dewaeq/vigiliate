@@ -30,6 +30,7 @@ class Json {
         void addKeyValue(const char *key, const char *value);
         void addKeyValue(const char *key, float value);
         void addKeyValue(const char *key, bool value);
+        void addKeyValue(const char *key);
         const char *build();
     private:
         char content[JSON_BUFFER_SIZE];
