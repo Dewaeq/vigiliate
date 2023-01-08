@@ -3,10 +3,9 @@
 
 void SDS011Sensor::begin() {
     sensor.begin();
-    sensor.setQueryReportingMode();
-
     delay(500);
-
+    sensor.setQueryReportingMode();
+    delay(1000);
     wake();
 }
 
@@ -19,6 +18,7 @@ void SDS011Sensor::update() {
         // read values and send sensor to bed
         else {
             read();
+            delay(500);
             sleep();
         }
     }
