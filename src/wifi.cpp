@@ -122,7 +122,7 @@ void WifiClass::connect() {
 	WebServer.send(200, "text/plain", "succes");
 
 	delay(200);
-	ESP.reset();
+	ESP.restart();
 }
 
 void WifiClass::disconnect() {
@@ -136,7 +136,7 @@ void WifiClass::disconnect() {
 	Flash.setSSID("");
 	Flash.setPassword("");
 	WiFi.disconnect();
-	ESP.reset();
+	ESP.restart();
 }
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_WIFI)
