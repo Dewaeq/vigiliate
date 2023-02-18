@@ -28,14 +28,6 @@ void loop() {
 	WebServer.handle();
 	Api.update();
 	Sensors.update();
-
-	if (rebootTimer.isOver()) {
-		reboot();
-	}
-}
-
-void reboot() {
-	ESP.restart();
 }
 
 void setupWebServer() {
